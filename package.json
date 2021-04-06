@@ -1,0 +1,23 @@
+{
+  "name": "openai-api-crash-course-node",
+  "version": "1.0.0",
+  "description": "Here you'll find code examples and instructions for using Node.js/JavaScript with the OpenAI API. The goal is to turn this into a crash course on the topic but for now it's just a few quick examples.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dabblelab/openai-api-crash-course-node.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dabblelab/openai-api-crash-course-node/issues"
+  },
+  "homepage": "https://github.com/dabblelab/openai-api-crash-course-node#readme",
+  "dependencies": {
+    "axios": "^0.21.1"
+  }
+}
