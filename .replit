@@ -1,2 +1,2 @@
 language = "nodejs"
-run = "node filter.js"
+run = "node _generate/topic.js"
