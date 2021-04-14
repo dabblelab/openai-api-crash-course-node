@@ -2,7 +2,7 @@ const yaml = require('js-yaml');
 const fs = require('fs');
 const { Liquid } = require('liquidjs')
 
-const slug = "simple-search";
+const slug = "classifications-endpoint";
 
 try {
   const data = yaml.load(fs.readFileSync(`_generate/topic.yaml`, 'utf8'));
@@ -14,7 +14,7 @@ try {
   })
 
   engine
-    .renderFile('topic', data.topic[1])
+    .renderFile('topic', data.topic[2])
     .then((result) => {
 
       const fs = require('fs');

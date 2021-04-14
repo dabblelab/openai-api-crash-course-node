@@ -90,4 +90,51 @@ topic:
 
       Let me know if you have any questions!
 
+  - name: Classifications Endpoint
+    slug: classifications-endpoint
+    file: classifications-endpoint.js
+    about: |
+      This example show how to call the classifications endpoint using using Node.js/JavaScript. For details about the classifications endpoint [see the OpenAI Docs](https://beta.openai.com/docs/api-reference/classifications).
+    code: |
+      const axios = require('axios');
+      const examples = [
+                        ["The service was super quick. I love that.","Good"],
+                        ["Would not go back.","Poor"],
+                        ["I tried the chicken and cranberry pizza...mmmm!","Good"],
+                        ["There were no signs indicating cash only!","Poor"],
+                        ["I was disgusted. There was a hair in my food.","Poor"],
+                        ["The waitress was a little slow but friendly.","Neutral"]
+                      ]
+
+      const client = axios.create({
+        headers: {
+          'Authorization': 'Bearer ' + process.env.OPENAI_API_KEY
+        }
+      });
+
+      const endpoint = "https://api.openai.com/v1/classifications";
+
+      const params = {
+        "query": "I'm never going to this place again",
+        "examples": examples,
+        "model": "curie"
+      }
+
+      client.post(endpoint, params)
+        .then(result => {
+          console.log(params.query + '\nLABEL:' + result.data.label);
+        }).catch(err => {
+          console.log(err);
+        });
+
+    results: |
+      I'm never going to this place again
+      LABEL:Poor
+      
+    summary: |
+      The `examples` array is being used for the example classifications. You can change the examples and labels in that array, along with the query to try different classifications. 
+
+      Let me know if you have any questions!
+
+
      
