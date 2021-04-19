@@ -136,5 +136,56 @@ topic:
 
       Let me know if you have any questions!
 
+  - name: File Upload
+    slug: file-upload
+    file: file-upload.js
+    about: |
+      This example show how to upload a jsonl file to the Files endpoint using using Node.js/JavaScript. This example is posting a file for the `classifications` endpoint. You can change the file `purpose` in step 2 of the code below. The purpose can be, `search`, `answers`, or `classifications`. See the [see the OpenAI Docs](https://beta.openai.com/docs/api-reference/files) for details.
 
+      For the example code to work, you'll also need to create a file named `reviews.jsonl` and add data for the classifications endpoint. Here is some sample data you can use for testing.
+
+      ```
+      {"text": "i love this place", "label": "Good", "metadata": {"id":"1"}}
+      {"text": "i hate this place", "label": "Poor", "metadata": {"id":"2"}}
+      {"text": "i have no opinion", "label": "Neutral", "metadata": {"id":"3"}}
+      ```
+
+    code: |
+      // 1. Require a few libraries that will be used
+      const fs = require('fs');
+      const axios = require('axios');
+      const FormData = require('form-data');
+
+      // 2. Get the data file ready for the http post
+      const data = new FormData();
+      data.append('purpose', 'classifications');
+      data.append('file', fs.createReadStream('reviews.jsonl'));
+
+      // 3. Set http request parameters for axios
+      const params = {
+        method: 'post',
+        url: 'https://api.openai.com/v1/files',
+        headers: { 
+          'Authorization': 'Bearer ' + process.env.OPENAI_API_KEY, 
+          ...data.getHeaders()
+        },
+        data : data
+      };
+
+      // 4. Call the openai api and log results to the console
+      axios(params)
+      .then(function (response) {
+        console.log(JSON.stringify(response.data));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+    results: |
+      {"id":"file-ZMHNItHRzrkYbIf19mutOvlR","object":"file","bytes":215,"created_at":1618832808,"filename":"reviews.jsonl","purpose":"classifications","status":"uploaded","status_details":null}
+      
+    summary: |
+      The `id` value is what you'll need from the response to use the file with the search, classifications, or answers endpoint. 
+
+      Let me know if you have any questions!
      

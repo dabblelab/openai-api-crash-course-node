@@ -1,6 +1,6 @@
-# Simple Search
+# File Upload
 
-Here is a super simple example of how to call the search endpoint usng Node.js/JavaScript. For details about the search endpoint [see the OpenAI Docs](https://beta.openai.com/docs/guides/search).
+This example show how to upload a jsonl file to the Files endpoint using using Node.js/JavaScript. For details about the files endpoint [see the OpenAI Docs](https://beta.openai.com/docs/api-reference/files).
 
 
 > **NOTE:** This tutorial is part of a series. If you have not read the [getting started post](https://community.openai.com/t/getting-started-with-the-openai-api-and-node-js-javascript/223/3) you should check that one out first.
@@ -9,49 +9,53 @@ Here is a super simple example of how to call the search endpoint usng Node.js/J
 
 1. log in to [Replit.com](https://replit.com)
 2. Open the `openai-examples-node` repl that you created in the [getting started](https://community.openai.com/t/getting-started-with-the-openai-api-and-node-js-javascript/223/3) tutorial.
-3. Create a new file named `simple-search.js`
-4. Copy the following code into the simple-search.js file.
+3. Create a new file named `file-upload.js`
+4. Copy the following code into the file-upload.js file.
 ```javascript
+// 1. Require a few libraries that will be used
+const fs = require('fs');
 const axios = require('axios');
-const apiKey = process.env.OPENAI_API_KEY;
-const client = axios.create({
-  headers: { 'Authorization': 'Bearer ' + apiKey }
-});
+const FormData = require('form-data');
 
+// 2. Get the data file ready for the http post
+const data = new FormData();
+data.append('purpose', 'classifications');
+data.append('file', fs.createReadStream('chapter09/reviews.jsonl'));
+
+// 3. Set http request parameters for axios
 const params = {
-  "documents": ["plane", "boat", "spaceship", "car"],
-  "query": "A vehicle with wheels"
-}
+  method: 'post',
+  url: 'https://api.openai.com/v1/files',
+  headers: { 
+    'Authorization': 'Bearer ' + process.env.OPENAI_API_KEY, 
+    ...data.getHeaders()
+  },
+  data : data
+};
 
-client.post('https://api.openai.com/v1/engines/davinci/search', params)
-  .then(result => {
-    console.log(result.data);
-  }).catch(err => {
-    console.log(err);
-  });
+// 4. Call the openai api and log results to the console
+axios(params)
+.then(function (response) {
+  console.log(JSON.stringify(response.data));
+})
+.catch(function (error) {
+  console.log(error);
+});
 
 ```
 4. Update the `.replit` file with the following
 ```
 language = "nodejs"
-run = "node simple-search.js"
+run = "node file-upload.js"
 ```
 5. Review the results in the console pane. You should see a result similar to the following example.
 ```json
-{
-  object: 'list',
-  data: [
-    { object: 'search_result', document: 0, score: 57.427 },
-    { object: 'search_result', document: 1, score: 46.697 },
-    { object: 'search_result', document: 2, score: 93.986 },
-    { object: 'search_result', document: 3, score: 179.054 }
-  ],
-  model: 'davinci:2020-05-03'
-}
+I'm never going to this place again
+LABEL:Poor
 
 ```
 
-The `params` object contains an array of `documents` and a `query`. The search endpoint ranks the documents by how semantically similar they are to the query. The results contain an array of objects with a reference to each document (0 = the first document - `plane` in our example) and a score. The highest score for our example is document 3 (`car`) which makes sense because the query was `A vehicle with wheels`. 
+The `examples` array is being used for the example classifications. You can change the examples and labels in that array, along with the query to try different classifications. 
 
 Let me know if you have any questions!
 

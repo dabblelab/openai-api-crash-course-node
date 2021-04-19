@@ -2,7 +2,7 @@ const yaml = require('js-yaml');
 const fs = require('fs');
 const { Liquid } = require('liquidjs')
 
-const slug = "classifications-endpoint";
+const item = 3;
 
 try {
   const data = yaml.load(fs.readFileSync(`_generate/topic.yaml`, 'utf8'));
@@ -14,12 +14,12 @@ try {
   })
 
   engine
-    .renderFile('topic', data.topic[2])
+    .renderFile('topic', data.topic[3])
     .then((result) => {
 
       const fs = require('fs');
 
-      fs.writeFile(`topics/_${slug}.md`, result, function(err) {
+      fs.writeFile(`topics/_${data.topic[item].slug}.md`, result, function(err) {
         if (err) throw err;
         console.log(result);
       });

@@ -1,6 +1,14 @@
 # File Upload
 
-This example show how to upload a jsonl file to the Files endpoint using using Node.js/JavaScript. For details about the files endpoint [see the OpenAI Docs](https://beta.openai.com/docs/api-reference/files).
+This example show how to upload a jsonl file to the Files endpoint using using Node.js/JavaScript. This example is posting a file for the `classifications` endpoint. You can change the file `purpose` in step 2 of the code below. The purpose can be, `search`, `answers`, or `classifications`. See the [see the OpenAI Docs](https://beta.openai.com/docs/api-reference/files) for details.
+
+For the example code to work, you'll also need to create a file named `reviews.jsonl` and add data for the classifications endpoint. Here is some sample data you can use for testing.
+
+```
+{"text": "i love this place", "label": "Good", "metadata": {"id":"1"}}
+{"text": "i hate this place", "label": "Poor", "metadata": {"id":"2"}}
+{"text": "i have no opinion", "label": "Neutral", "metadata": {"id":"3"}}
+```
 
 
 > **NOTE:** This tutorial is part of a series. If you have not read the [getting started post](https://community.openai.com/t/getting-started-with-the-openai-api-and-node-js-javascript/223/3) you should check that one out first.
@@ -20,7 +28,7 @@ const FormData = require('form-data');
 // 2. Get the data file ready for the http post
 const data = new FormData();
 data.append('purpose', 'classifications');
-data.append('file', fs.createReadStream('chapter09/reviews.jsonl'));
+data.append('file', fs.createReadStream('reviews.jsonl'));
 
 // 3. Set http request parameters for axios
 const params = {
@@ -50,12 +58,11 @@ run = "node file-upload.js"
 ```
 5. Review the results in the console pane. You should see a result similar to the following example.
 ```json
-I'm never going to this place again
-LABEL:Poor
+{"id":"file-ZMHNItHRzrkYbIf19mutOvlR","object":"file","bytes":215,"created_at":1618832808,"filename":"reviews.jsonl","purpose":"classifications","status":"uploaded","status_details":null}
 
 ```
 
-The `examples` array is being used for the example classifications. You can change the examples and labels in that array, along with the query to try different classifications. 
+The `id` value is what you'll need from the response to use the file with the search, classifications, or answers endpoint. 
 
 Let me know if you have any questions!
 
